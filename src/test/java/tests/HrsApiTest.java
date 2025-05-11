@@ -12,80 +12,110 @@ public class HrsApiTest {
 
     @BeforeAll
     public static void setup() {
-        // Устанавливаем базовый URL для всех тестов
-        RestAssured.baseURI = "http://localhost:8080"; // Замените на реальный URL вашего сервиса
+        RestAssured.baseURI = "http://localhost:8082"; // Замените на актуальный HRS URL
     }
 
-    // Тест на расчет стоимости звонка
+    //POST /api/call/calculate-cost
+
     @Test
-    public void testCalculateCallCost() {
-        // Тело запроса
-        String requestBody = "{ \"msisdnClient\": \"1234567890\", \"callDuration\": 5, \"tariffId\": 12 }";
+    public void testCalculateCallCostSuccess() {
+        String body = """
+        {
+            "msisdn": "79001112233",
+            "tariffId": 1,
+            "callDurationMinutes": 10
+        }
+        """;
 
         given()
                 .contentType(ContentType.JSON)
-                .body(requestBody)
+                .body(body)
                 .when()
-                .post("/calculate-call-cost")
+                .post("/api/call/calculate-cost")
                 .then()
                 .statusCode(200)
-                .body("money", notNullValue());  // Проверяем, что в ответе есть поле "money"
+                .body("cost", greaterThan(0.0f)); // предполагаем, что возвращается поле cost
     }
 
-    // Тест на продление тарифа
     @Test
-    public void testExtendTariff() {
-        // Тело запроса
-        String requestBody = "{ \"msisdn\": \"1234567890\", \"tariffId\": 12 }";
+    public void testCalculateCallCostInvalidDuration() {
+        String body = """
+        {
+            "msisdn": "79001112233",
+            "tariffId": 1,
+            "callDurationMinutes": -5
+        }
+        """;
 
         given()
                 .contentType(ContentType.JSON)
-                .body(requestBody)
+                .body(body)
                 .when()
-                .post("/extend-tariff")
+                .post("/api/call/calculate-cost")
                 .then()
-                .statusCode(200)
-                .body("message", equalTo("Tariff extended successfully"));
+                .statusCode(400);
     }
 
-    // Тест на смену тарифа
+    //POST /api/tariff/change
+
     @Test
-    public void testChangeTariff() {
-        // Тело запроса
-        String requestBody = "{ \"msisdn\": \"1234567890\", \"newTariffId\": 13, \"changeDate\": \"2025-05-06\" }";
+    public void testChangeTariffWithDateSuccess() {
+        String body = """
+        {
+            "msisdn": "79001112233",
+            "tariffId": 2,
+            "changeDate": "2025-05-11T00:00:00Z"
+        }
+        """;
 
         given()
                 .contentType(ContentType.JSON)
-                .body(requestBody)
+                .body(body)
                 .when()
-                .post("/change-tariff")
+                .post("/api/tariff/change")
                 .then()
-                .statusCode(200)
-                .body("message", equalTo("Tariff changed successfully"));
+                .statusCode(200);
     }
 
-    // Тест на получение параметров тарифа
     @Test
-    public void testGetTariffParameters() {
-        int tariffId = 12; // ID тарифа для теста
+    public void testChangeTariffWithInvalidMsisdn() {
+        String body = """
+        {
+            "msisdn": "12345",
+            "tariffId": 2,
+            "changeDate": "2025-05-11T00:00:00Z"
+        }
+        """;
 
         given()
+                .contentType(ContentType.JSON)
+                .body(body)
                 .when()
-                .get("/get-tariff-parameters/" + tariffId)
+                .post("/api/tariff/change")
                 .then()
-                .statusCode(200)
-                .body("tariff.id", equalTo(tariffId))
-                .body("tariff.name", equalTo("Помесячный"));
+                .statusCode(400);
     }
 
-    // Тест на проверку доступности сервиса
+    //GET /api/tariff/{tariffId}
+
     @Test
-    public void testCheckServiceStatus() {
+    public void testGetTariffByIdSuccess() {
         given()
+                .pathParam("tariffId", 1)
                 .when()
-                .get("/check-service-status")
+                .get("/api/tariff/{tariffId}")
                 .then()
                 .statusCode(200)
-                .body("status", equalTo("Service is available"));
+                .body("tariffId", equalTo(1));
+    }
+
+    @Test
+    public void testGetTariffByIdNotFound() {
+        given()
+                .pathParam("tariffId", 9999)
+                .when()
+                .get("/api/tariff/{tariffId}")
+                .then()
+                .statusCode(404);
     }
 }
