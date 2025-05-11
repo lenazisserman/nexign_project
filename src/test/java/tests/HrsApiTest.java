@@ -8,11 +8,13 @@ import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
+import java.util.stream.Stream;
+
 public class HrsApiTest {
 
     @BeforeAll
     public static void setup() {
-        RestAssured.baseURI = "http://localhost:8082"; // Замените на актуальный HRS URL
+        RestAssured.baseURI = "http://localhost:8082";
     }
 
     //POST /api/call/calculate-cost
@@ -22,7 +24,7 @@ public class HrsApiTest {
         String body = """
         {
             "msisdn": "79001112233",
-            "tariffId": 1,
+            "tariffId": 11,
             "callDurationMinutes": 10
         }
         """;
@@ -34,7 +36,7 @@ public class HrsApiTest {
                 .post("/api/call/calculate-cost")
                 .then()
                 .statusCode(200)
-                .body("cost", greaterThan(0.0f)); // предполагаем, что возвращается поле cost
+                .body("cost", greaterThan(0.0f));
     }
 
     @Test
@@ -42,7 +44,7 @@ public class HrsApiTest {
         String body = """
         {
             "msisdn": "79001112233",
-            "tariffId": 1,
+            "tariffId": 11,
             "callDurationMinutes": -5
         }
         """;
@@ -63,8 +65,8 @@ public class HrsApiTest {
         String body = """
         {
             "msisdn": "79001112233",
-            "tariffId": 2,
-            "changeDate": "2025-05-11T00:00:00Z"
+            "tariffId": 12,
+            "changeDate": "2025-05-11T00:00:00"
         }
         """;
 
@@ -82,8 +84,8 @@ public class HrsApiTest {
         String body = """
         {
             "msisdn": "12345",
-            "tariffId": 2,
-            "changeDate": "2025-05-11T00:00:00Z"
+            "tariffId": 12,
+            "changeDate": "2025-05-11T00:00:00"
         }
         """;
 
@@ -99,15 +101,40 @@ public class HrsApiTest {
     //GET /api/tariff/{tariffId}
 
     @Test
-    public void testGetTariffByIdSuccess() {
+    public void testTariff12_WithMonthlyFeeAndIncludedMinutes() {
         given()
-                .pathParam("tariffId", 1)
+                .pathParam("tariffId", 12)
                 .when()
                 .get("/api/tariff/{tariffId}")
                 .then()
                 .statusCode(200)
-                .body("tariffId", equalTo(1));
+                .body("tariff.monthlyFee", equalTo(100))
+                .body("tariff.includedMinutes", equalTo(50))
+                .body("tariff.overlimitTariffId", equalTo(11))
+                .body("tariff.currency", equalTo("у.е."))
+                .body("tariff.callTypes.incoming", equalTo(true))
+                .body("tariff.callTypes.outgoing.external", equalTo(true))
+                .body("tariff.callTypes.outgoing.internal", equalTo(true))
+                .body("tariff.description", not(emptyString()));
     }
+
+    @Test
+    public void testTariff11_WithPerMinuteRates() {
+        given()
+                .pathParam("tariffId", 11)
+                .when()
+                .get("/api/tariff/{tariffId}")
+                .then()
+                .statusCode(200)
+                .body("tariff.incomingCalls.costPerMinute", equalTo(0))
+                .body("tariff.incomingCalls.currency", equalTo("у.е."))
+                .body("tariff.outgoingCalls.external.costPerMinute", equalTo(2.5f))
+                .body("tariff.outgoingCalls.external.currency", equalTo("у.е."))
+                .body("tariff.outgoingCalls.internal.costPerMinute", equalTo(1.5f))
+                .body("tariff.outgoingCalls.internal.currency", equalTo("у.е."))
+                .body("tariff.description", not(emptyString()));
+    }
+
 
     @Test
     public void testGetTariffByIdNotFound() {

@@ -1,0 +1,16 @@
+[
+  {
+    "type": "02",
+    "clientMsisdn": "79876543221",
+    "partnerMsisdn": "79123456789",
+    "startTime": "2025-02-10T10:13:12",
+    "endTime": "2025-02-10T10:14:20"
+  },
+  {
+    "type": "01",
+    "clientMsisdn": "79996667755",
+    "partnerMsisdn": "79876543221",
+    "startTime": "2025-02-10T10:12:25",
+    "endTime": "2025-02-10T10:12:57"
+  }
+]

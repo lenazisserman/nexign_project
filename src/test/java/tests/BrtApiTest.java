@@ -21,13 +21,13 @@ public class BrtApiTest {
     public void testCreateNewAbonentSuccess() {
         String body = """
         {
-            "lastName": "Ivanov",
-            "firstName": "Ivan",
-            "middleName": "Ivanovich",
-            "msisdn": "79001112233",
-            "tariffId": 1,
-            "money": 100.50,
-            "date": "2025-05-11T00:00:00Z"
+            "lastName": "Тестов",
+            "firstName": "Тест",
+            "middleName": "Тестович",
+            "msisdn": "79101112299",
+            "tariffId": 11,
+            "money": 100,
+            "date": "2025-05-11T00:00:00"
         }
         """;
 
@@ -47,9 +47,9 @@ public class BrtApiTest {
             "lastName": "Ivanov",
             "firstName": "Ivan",
             "msisdn": "123",
-            "tariffId": 1,
+            "tariffId": 11,
             "money": 50,
-            "date": "2025-05-11T00:00:00Z"
+            "date": "2025-05-11T00:00:00"
         }
         """;
 
@@ -121,7 +121,7 @@ public class BrtApiTest {
     public void testChangeTariffSuccess() {
         String body = """
         {
-            "tariffId": 2
+            "tariffId": 11
         }
         """;
 

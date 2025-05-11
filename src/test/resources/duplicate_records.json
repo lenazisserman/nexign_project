@@ -1,0 +1,72 @@
+[
+  {
+    "type": "01",
+    "clientMsisdn": "79996667755",
+    "partnerMsisdn": "79876543221",
+    "startTime": "2025-02-10T10:12:25",
+    "endTime": "2025-02-10T10:12:57"
+  },
+  {
+    "type": "01",
+    "clientMsisdn": "79996667755",
+    "partnerMsisdn": "79876543221",
+    "startTime": "2025-02-10T10:12:25",
+    "endTime": "2025-02-10T10:12:57"
+  },
+  {
+    "type": "01",
+    "clientMsisdn": "79112223344",
+    "partnerMsisdn": "79263334455",
+    "startTime": "2025-02-10T10:15:01",
+    "endTime": "2025-02-10T10:16:30"
+  },
+  {
+    "type": "02",
+    "clientMsisdn": "79263334455",
+    "partnerMsisdn": "79112223344",
+    "startTime": "2025-02-10T10:17:45",
+    "endTime": "2025-02-10T10:18:10"
+  },
+  {
+    "type": "01",
+    "clientMsisdn": "79001112233",
+    "partnerMsisdn": "79254443322",
+    "startTime": "2025-02-10T10:19:00",
+    "endTime": "2025-02-10T10:20:15"
+  },
+  {
+    "type": "02",
+    "clientMsisdn": "79254443322",
+    "partnerMsisdn": "79001112233",
+    "startTime": "2025-02-10T10:21:30",
+    "endTime": "2025-02-10T10:22:45"
+  },
+  {
+    "type": "01",
+    "clientMsisdn": "79375556644",
+    "partnerMsisdn": "79486667755",
+    "startTime": "2025-02-10T10:23:50",
+    "endTime": "2025-02-10T10:24:55"
+  },
+  {
+    "type": "02",
+    "clientMsisdn": "79486667755",
+    "partnerMsisdn": "79375556644",
+    "startTime": "2025-02-10T10:25:10",
+    "endTime": "2025-02-10T10:26:20"
+  },
+  {
+    "type": "01",
+    "clientMsisdn": "79597778899",
+    "partnerMsisdn": "79608889900",
+    "startTime": "2025-02-10T10:27:25",
+    "endTime": "2025-02-10T10:28:35"
+  },
+  {
+    "type": "02",
+    "clientMsisdn": "79608889900",
+    "partnerMsisdn": "79597778899",
+    "startTime": "2025-02-10T10:29:40",
+    "endTime": "2025-02-10T10:30:50"
+  }
+]
