@@ -27,6 +27,11 @@
             <artifactId>opencsv</artifactId>
             <version>5.7.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.3</version> <!-- или последнюю -->
+        </dependency>
 
         <dependency>
             <groupId>com.rabbitmq</groupId>
