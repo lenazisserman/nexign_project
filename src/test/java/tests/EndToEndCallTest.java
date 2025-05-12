@@ -133,7 +133,7 @@ public class EndToEndCallTest {
         try (Connection conn = DriverManager.getConnection(HRS_DB_URL, HRS_DB_USER, HRS_DB_PASSWORD)) {
             PreparedStatement stmt = conn.prepareStatement("""
                 SELECT SUM(duration_minutes) AS total
-                FROM call_records
+                FROM calls
                 WHERE msisdn = ?
             """);
             stmt.setString(1, msisdn);
